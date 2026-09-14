@@ -181,14 +181,7 @@ blob_fixups: blob_fixups_user_type = {
         'vendor/bin/hw/dolbycodec2',
         'vendor/bin/hw/vendor.dolby_3_12.media.c2@1.0-service',
     ): blob_fixup()
-        .replace_needed('libutils.so', 'libutils_vendor.so')
-        .binary_regex_replace(b'\x00\x21\x80\x52', b'\x00\x24\x80\x52'),
-    # These services allocate utils::ComponentStore with the size from the
-    # headers they were built against (0x108). libcodec2_hidl@1.0/@1.2 built
-    # from Android 16 sources place the virtual RefBase base at +0x110, making
-    # the object 0x120 bytes, so its constructor writes past the allocation and
-    # registerAsService() crashes at random. Bump the operator new size:
-    # mov w0, #0x108 -> mov w0, #0x120 (one occurrence per binary).
+        .replace_needed('libutils.so', 'libutils_vendor.so'),
     (
         'vendor/bin/hw/vendor.qti.media.c2@1.0-service',
         'vendor/bin/hw/vendor.qti.media.c2audio@1.0-service',
